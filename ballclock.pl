@@ -53,10 +53,7 @@ sub game {
     my $hour_count  = unshift @hour_track, 1;
     my $new_count   = unshift @new_queue, 1;
 
-    # say "ORIGINAL QUEUE"
-    # print join(", ", @queue), "\n";
-    # say "Shift queue outside while loop";
-    say $queue_count;
+
     # Clear Tracks
     shift @queue;
     shift @five_min_track;
@@ -66,39 +63,21 @@ sub game {
 # Step 1 Min Track
     while($min_count < 5) {
     
+      # Pushing ball onto the mintrack array till its count is 5
       push @min_track, shift @queue;
       $min_count++;
        
     }
-    
-    # Testing 
-    # say "ALTERD QUEUE";
-    # print join(", ", @queue), "\n";
-    # say "New minCount";
-    # print join(", ", $min_count), "\n";
-    # say "New Min Track";
-    # print join(", ", @min_track), "\n";
-
     my @R1track = reverse @min_track;
-    # print join(", ", @R1track), "\n";
+
 
 # Step 2 five min track
     push @five_min_track, shift @R1track;
-   
-    # say "New 5 min track";
-    # print join(", ", @five_min_track), "\n";
-    # say "old R1 track";
-    # print join(", ", @R1track), "\n";
+  
     while($new_count < 5) {
       push @new_queue, shift @R1track;
       $new_count++;
     }
-    
-    say "NEW FIVE MIN TRACK";
-    print join(", ", @five_min_track), "\n";
-    say "NEW QUEUE";
-    print join(", ", @new_queue), "\n";
-
     
 
   } else {
