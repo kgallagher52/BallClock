@@ -40,8 +40,7 @@ sub create_queue {
     if($answer <= 127 && $answer >= 27){
         my @queue_copy = (1..$answer);
         my @queue = (1..$answer);
-        queue(@queue);
-        return Continue($answer);
+        game(@queue);
 
         
     } else {
@@ -51,112 +50,176 @@ sub create_queue {
 }
 
 
-sub Continue {
-my $count = 0;
-my @check = (1..@_);
-my $seccount = scalar @check;
- while($count != $seccount) {
+sub game {
+    my @queue = @_;
+    my @queue_copy;
+    queue(@queue);
+ while(@queue != 27) {
+
 sub queue {
     say "_______________________________________";
     say "queue ACTIVATED";
     say "\n";
-    
-    say "ORIGINAL QUEUE";
-    say @_;
-    say "\n";
-    
-    say "ORIGINAL QUEUE COUNT";
-    say "\n";
-
-    my @staged_minute;
-    
-    my $stage_count = scalar @staged_minute;
-  
-
-
-    while($stage_count != 5) {
-        push @staged_minute, shift @_;
-        $stage_count++;
-
-    }
-
     my @queue = @_;
-    
-    say "STAGED BALLS FOR MINUTE TRACK";
-    say @staged_minute;
-    say "\n";
-
-    say "COUNT OF THE BALLS ON THE STAGED MIN TRACK";
-    say $stage_count;
-    say "\n";
-    minute_track(@staged_minute);
-
-}
-
-
-sub minute_track {
-    say "_______________________________________";
-    say "MINUTE TRACK ACTIVATED";
-    say "\n";
-
-    say "CURRENT MINUTE TRACK";
-    say @_;
-    say "\n";
-    
-    # Reverse
-    my @ReverseM = reverse @_;
-    say "REVERSED MINUTE TRACK";
-    say @ReverseM;
-    return five_minute_track(@ReverseM);
-
-
-}
-
-sub five_minute_track {
-    say "_______________________________________";
-    say "FIVE MINUTE TRACK ACTIVATED";
-    say "\n";
-
-    say "DATA PASSED FROM MINUTE TRACK";
-    say @_;
-    say "\n";
-
-    my $passed_min_count_data = scalar @_;
-    say "COUNT OF PASSED DATA";
-    say $passed_min_count_data;
-    say "\n";
-
-    my @new_queue;
-
+    my $count = scalar @queue;
+    my @staged_minute;
     my @five_min_track;
-    push @five_min_track, shift @_;
+    my @hour_track;
+    my @garbage;
+    my $mincount  = scalar @staged_minute;
+    my $fivecount = scalar @five_min_track;
+    my $hourcount = scalar @hour_track; 
 
-    while($passed_min_count_data != 0) {
-        push @new_queue, shift @_;
-        $passed_min_count_data--;
+
+    
+    say "QUEUE";
+    say @queue;
+    my $count = @queue.length;
+
+do {
+
+while($count != 0) {
+    push @staged_minute, shift @queue;
+   
+    if((@staged_minute.length) == 5){
+      
+        my @reverse = reverse @staged_minute;
+        say "REVERSED";
+        say @reverse;
+        push @five_min_track, shift @reverse;
+        push @queue, shift @reverse;
+        push @queue, shift @reverse;
+        push @queue, shift @reverse;
+        push @queue, shift @reverse;
+        
+        push @garbage, shift @staged_minute;
+        push @garbage, shift @staged_minute;
+        push @garbage, shift @staged_minute;
+        push @garbage, shift @staged_minute;
+        push @garbage, shift @staged_minute;
+
+
     }
-    say "CURRENT FIVE MINUTE TRACK";
-    say @five_min_track;
-    say "\n";
+
+
+    
+    if((@five_min_track.length) <= 11){
+        my @reversefive = reverse @five_min_track;
+        push @hour_track, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+        push @queue, shift @reversefive;
+
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        push @garbage, shift @five_min_track;
+        
+    }
 
 
 
+    if((@hour_track.length) <= 11) {
+        my @reversehour = reverse @hour_track;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        push @queue, shift @reversehour;
+        
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track;
+        push @garbage, shift @hour_track; 
 
-    say "NEW QUEUE FROM FIVE MIN TRACK";
-    say "\n";
+    }
+
+
+    $count--;
+    say "NEW QUEUE";
+   
+    # game(@queue);
+}
+@queue;
+    
+}while(@queue != @queue_copy)
+
+    
+
+
+
+}
+
+
+# sub five_minute_track {
+#     say "_______________________________________";
+#     say "FIVE MINUTE TRACK ACTIVATED";
+#     say "\n";
+
+#     say "DATA PASSED FROM MINUTE TRACK";
+#     say @_;
+#     say "\n";
+
+#     my $passed_min_count_data = scalar @_;
+#     say "COUNT OF PASSED DATA";
+#     say $passed_min_count_data;
+#     say "\n";
+
+#     my @new_queue;
+
+#     my @five_min_track;
+#     push @five_min_track, shift @_;
+
+#     while($passed_min_count_data != 0) {
+#         push @new_queue, shift @_;
+#         $passed_min_count_data--;
+#     }
+#     say "CURRENT FIVE MINUTE TRACK";
+#     say @five_min_track;
+#     say "\n";
+
+ 
+#     say "NEW QUEUE FROM FIVE MIN TRACK";
+#     say "\n";
    
 
 
-    say "_______________________________________";
+#     say "_______________________________________";
 
-}
+# }
 
 
-sub hour_track {
+# sub hour_track {
 
-}
-    $count++;
+# }
+
  }
-
 }
 
