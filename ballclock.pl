@@ -1,9 +1,10 @@
-use v5.16;
+use v5.18.2;
 use strict;
 use warnings;
 use diagnostics;
 use feature 'say';
 use feature 'switch';
+
 
 sub intro {
       my $Welcome = <<"END";
@@ -21,8 +22,8 @@ sub begin {
   my $answer = <STDIN>;
   chop $answer;
   if ($answer eq 'yes') {
-      say "coditional working";
-      game();
+      say "They are ready to play";
+      create_queue();
   } else {
     say "Fine I will just keep asking \n";
     intro();
@@ -30,68 +31,145 @@ sub begin {
 
 }
 
-sub game {
-  say "How many balls would you like in the queue between 27-127?";
-  my $answer = <STDIN>;
-
-  if($answer <= 127 && $answer >= 27){
-    # Parts of clock
-    my @queue = (2 - 0..$answer);
-    my @queueCheck = (2 - 0..$answer);
-    my @new_queue = ();
-    my @min_track = ();
-    my @five_min_track = ();
-    my @hour_track = ();
-
-    # say @min_track;
-
-    #Counts 
-    my $count = 0;
-    my $queue_count = unshift @queue, 1;
-    my $min_count   = unshift @min_track, 1;
-    my $five_count  = unshift @five_min_track, 1;
-    my $hour_count  = unshift @hour_track, 1;
-    my $new_count   = unshift @new_queue, 1;
 
 
-    # Clear Tracks
-    shift @queue;
-    shift @five_min_track;
-    shift @new_queue;
-    shift @hour_track;
+sub create_queue {
+    say "How many balls would you like in the queue between 27-127?";
+    my $answer = <STDIN>;
+    chop $answer;
+    if($answer <= 127 && $answer >= 27){
+        my @queue_copy = (1..$answer);
+        my @queue = (1..$answer);
+        my $queue_copy = @queue_copy;
+        game(@queue);
 
-# Step 1 Min Track
-    while($min_count < 5) {
-    
-      # Pushing ball onto the mintrack array till its count is 5
-      push @min_track, shift @queue;
-      $min_count++;
-       
-    }
-    my @R1track = reverse @min_track;
-
-
-# Step 2 five min track
-    push @five_min_track, shift @R1track;
-  
-    while($new_count < 5) {
-      push @new_queue, shift @R1track;
-      $new_count++;
-    }
-    
-
-  } else {
-    say "Sorry amount needs to be in the range 27-127."
-    # ADD SO IT GOES BACK TO ASKING FOR NUMBER GAME();
+        
+    } else {
+    say "Sorry amount needs to be in the range 27-127.";
+    create_queue();
   }
 }
 
 
+sub game {
+    my @queue = @_;
+    my @queue_copy;
+    queue(@queue);
+}
 
-# balls = {
-    # N - day counter
-    # H - Hour Track
-    # M - 5-min Track
-    # Q - Ball Queue
-    # R - Refrence Copy
-#}
+sub queue {
+    my @queue = @_;
+    my @queue_copy = @_;
+
+    my @new_queue;
+    my $count = scalar @queue;
+
+    my @five_min_track;
+    my @hour_track;
+    my @staged_minute;
+    my @garbage;
+    my $mincount = 5;
+    my $fivecount = 0;
+    my $hourcount = 0;
+  
+   
+
+
+
+  do {
+    
+    push @staged_minute, shift @queue;
+    push @staged_minute, shift @queue;
+    push @staged_minute, shift @queue;
+    push @staged_minute, shift @queue;
+    push @staged_minute, shift @queue;
+
+    when($mincount == 5){    
+    my @reverse = reverse @staged_minute;
+    
+    push @five_min_track, shift @reverse;
+
+    push @new_queue, shift @reverse;
+    push @new_queue, shift @reverse;
+    push @new_queue, shift @reverse;
+    push @new_queue, shift @reverse;
+    
+    push @garbage, shift @staged_minute;
+    push @garbage, shift @staged_minute;
+    push @garbage, shift @staged_minute;
+    push @garbage, shift @staged_minute;
+    push @garbage, shift @staged_minute;
+    $fivecount++;
+    continue;
+    }
+    
+    when($fivecount == 11) {
+      my @reverse = reverse @five_min_track;
+
+      push @hour_track, shift @reverse;
+
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+
+
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      push @garbage, shift @five_min_track;
+      $hourcount++;
+
+      continue;
+    }
+      
+    when($hourcount == 11) {
+      my @reverse = reverse @hour_track;
+
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      push @new_queue, shift @reverse;
+      
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      push @garbage, shift @hour_track;
+      continue;
+
+    }
+    $count--;
+
+    say @queue_copy;
+    say @new_queue; 
+}while($count != 0)
+
+}
+

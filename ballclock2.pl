@@ -40,6 +40,8 @@ sub create_queue {
     if($answer <= 127 && $answer >= 27){
         my @queue_copy = (1..$answer);
         my @queue = (1..$answer);
+        my $queue_copy = @queue_copy;
+        say $queue_copy;
         game(@queue);
 
         
@@ -69,21 +71,17 @@ sub queue {
     my $mincount  = scalar @staged_minute;
     my $fivecount = scalar @five_min_track;
     my $hourcount = scalar @hour_track; 
-
-
-    
-    say "QUEUE";
-    say @queue;
-    my $count = @queue.length;
-
-do {
+    my $days = 0;
+  
 
 while($count != 0) {
     push @staged_minute, shift @queue;
    
-    if((@staged_minute.length) == 5){
-      
-        my @reverse = reverse @staged_minute;
+    if((@staged_minute.length) <= 5){
+        if((@staged_minute.length) == 5){
+         my @reverse = reverse @staged_minute;
+        
+       
         say "REVERSED";
         say @reverse;
         push @five_min_track, shift @reverse;
@@ -97,7 +95,7 @@ while($count != 0) {
         push @garbage, shift @staged_minute;
         push @garbage, shift @staged_minute;
         push @garbage, shift @staged_minute;
-
+        }
 
     }
 
@@ -164,18 +162,19 @@ while($count != 0) {
 
     $count--;
     say "NEW QUEUE";
-   
+
     # game(@queue);
 }
-@queue;
-    
-}while(@queue != @queue_copy)
+
+
 
     
 
 
 
 }
+say @queue
+
 
 
 # sub five_minute_track {
