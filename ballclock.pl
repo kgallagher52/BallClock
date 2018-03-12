@@ -6,6 +6,7 @@ use feature 'say';
 use feature 'switch';
 
 
+
 sub intro {
       my $Welcome = <<"END";
 Hi Welcom To Ball Clock, I will ask you how many balls you would like in your queue, and 
@@ -52,18 +53,19 @@ sub create_queue {
 
 
 sub game {
-    my @queue = @_;
-    my @queue_copy;
-    queue(@queue);
+    say "QUEUE IN GAME FUNCTION";
+    
+    queue(@_);
+    
 }
 
 sub queue {
-    my @queue = @_;
     my @queue_copy = @_;
-
     my @new_queue;
-    my $count = scalar @queue;
-
+    my $count = scalar @_;
+    say "ORIGINAL COUNT";
+    say $count;
+    my $count_copy = scalar @_;
     my @five_min_track;
     my @hour_track;
     my @staged_minute;
@@ -71,18 +73,15 @@ sub queue {
     my $mincount = 5;
     my $fivecount = 0;
     my $hourcount = 0;
+    my $daycount = 0;
   
-   
-
-
-
   do {
-    
-    push @staged_minute, shift @queue;
-    push @staged_minute, shift @queue;
-    push @staged_minute, shift @queue;
-    push @staged_minute, shift @queue;
-    push @staged_minute, shift @queue;
+   
+    push @staged_minute, shift @_;
+    push @staged_minute, shift @_;
+    push @staged_minute, shift @_;
+    push @staged_minute, shift @_;
+    push @staged_minute, shift @_;
 
     when($mincount == 5){    
     my @reverse = reverse @staged_minute;
@@ -165,11 +164,26 @@ sub queue {
       continue;
 
     }
-    $count--;
+      $count--;
 
-    say @queue_copy;
-    say @new_queue; 
-}while($count != 0)
+
+   
+
+    if($count == 1) {
+      
+      if(@queue_copy != @new_queue){
+          $daycount++;
+          say @new_queue;
+          game(@new_queue);
+        } else {
+          say "finally we got the  initial order";
+          return;
+        }
+      
+  
+    }
+  
+}while($count != 1)
 
 }
 
