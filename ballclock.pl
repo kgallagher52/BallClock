@@ -6,7 +6,6 @@ use feature 'say';
 use feature 'switch';
 
 
-
 sub intro {
       my $Welcome = <<"END";
 Hi Welcom To Ball Clock, I will ask you how many balls you would like in your queue, and 
@@ -41,8 +40,7 @@ sub create_queue {
     if($answer <= 127 && $answer >= 27){
         my @queue_copy = (1..$answer);
         my @queue = (1..$answer);
-        my $queue_copy = @queue_copy;
-        game(@queue);
+        game(@queue,@queue_copy);
 
         
     } else {
@@ -59,131 +57,45 @@ sub game {
     
 }
 
-sub queue {
+sub queue { 
+    my $count = 0;
     my @queue_copy = @_;
     my @new_queue;
-    my $count = scalar @_;
-    say "ORIGINAL COUNT";
-    say $count;
-    my $count_copy = scalar @_;
     my @five_min_track;
     my @hour_track;
-    my @staged_minute;
-    my @garbage;
-    my $mincount = 5;
-    my $fivecount = 0;
-    my $hourcount = 0;
-    my $daycount = 0;
-  
+    my @minute_track;  
   do {
-   
-    push @staged_minute, shift @_;
-    push @staged_minute, shift @_;
-    push @staged_minute, shift @_;
-    push @staged_minute, shift @_;
-    push @staged_minute, shift @_;
 
-    when($mincount == 5){    
-    my @reverse = reverse @staged_minute;
-    
-    push @five_min_track, shift @reverse;
-
-    push @new_queue, shift @reverse;
-    push @new_queue, shift @reverse;
-    push @new_queue, shift @reverse;
-    push @new_queue, shift @reverse;
-    
-    push @garbage, shift @staged_minute;
-    push @garbage, shift @staged_minute;
-    push @garbage, shift @staged_minute;
-    push @garbage, shift @staged_minute;
-    push @garbage, shift @staged_minute;
-    $fivecount++;
-    continue;
+    push @minute_track, shift @_;
+    if(scalar @minute_track == 5){  
+      push @five_min_track, pop @minute_track;
+      while (scalar @minute_track) {
+        push @new_queue, pop @minute_track;
+      }
     }
     
-    when($fivecount == 11) {
-      my @reverse = reverse @five_min_track;
-
-      push @hour_track, shift @reverse;
-
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-
-
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      push @garbage, shift @five_min_track;
-      $hourcount++;
-
-      continue;
-    }
-      
-    when($hourcount == 11) {
-      my @reverse = reverse @hour_track;
-
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      push @new_queue, shift @reverse;
-      
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      push @garbage, shift @hour_track;
-      continue;
+    if(scalar @five_min_track == 11) {
+      push @hour_track, pop @five_min_track;
+      while(scalar @five_min_track) {
+        push @new_queue, pop @five_min_track;
+      }
 
     }
-      $count--;
-
-
-   
-
-    if($count == 1) {
       
-      if(@queue_copy != @new_queue){
-          $daycount++;
-          say @new_queue;
-          game(@new_queue);
-        } else {
-          say "finally we got the  initial order";
-          return;
-        }
-      
+    if(scalar @hour_track == 11) {
+      while(scalar @hour_track){
+        push @new_queue, pop @hour_track;
+      }
+
+    }
+  say @new_queue;
+  say "_____________";
+  say @queue_copy;
+  $count++;
+  say $count;
+
   
-    }
-  
-}while($count != 1)
+}while(@queue_copy != @new_queue)
 
 }
 
