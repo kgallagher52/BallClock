@@ -1,10 +1,10 @@
 use v5.18.2;
 use strict;
 use warnings;
+no warnings;
 use diagnostics;
 use feature 'say';
 use feature 'switch';
-
 
 sub intro {
       my $Welcome = <<"END";
@@ -40,7 +40,7 @@ sub create_queue {
     if($answer <= 127 && $answer >= 27){
         my @queue_copy = (1..$answer);
         my @queue = (1..$answer);
-        game(@queue,@queue_copy);
+        queue(\@queue,\@queue_copy);
 
         
     } else {
@@ -50,52 +50,65 @@ sub create_queue {
 }
 
 
-sub game {
-    say "QUEUE IN GAME FUNCTION";
-    
-    queue(@_);
-    
-}
-
 sub queue { 
-    my $count = 0;
-    my @queue_copy = @_;
-    my @new_queue;
+    my $queue = shift;
+    my $queue_copy = shift;
+    my @queue = @$queue;
+    my @queue_copy = @$queue_copy;
+
     my @five_min_track;
     my @hour_track;
-    my @minute_track;  
+    my @minute_track;
+
+    my $count = 0;
+    my $match = 0;
+    
+   
+  
   do {
 
-    push @minute_track, shift @_;
+    push @minute_track, shift @queue;
+
     if(scalar @minute_track == 5){  
       push @five_min_track, pop @minute_track;
       while (scalar @minute_track) {
-        push @new_queue, pop @minute_track;
+        push @queue, pop @minute_track;
       }
-    }
+    } 
     
-    if(scalar @five_min_track == 11) {
+    if(scalar @five_min_track == 12) {
       push @hour_track, pop @five_min_track;
       while(scalar @five_min_track) {
-        push @new_queue, pop @five_min_track;
+        push @queue, pop @five_min_track;
       }
 
     }
       
-    if(scalar @hour_track == 11) {
+    if(scalar @hour_track == 12) {
       while(scalar @hour_track){
-        push @new_queue, pop @hour_track;
+        push @queue, pop @hour_track;
       }
 
     }
-  say @new_queue;
-  say "_____________";
-  say @queue_copy;
-  $count++;
-  say $count;
 
+
+    qw[@queue_copy];
+    if (@queue == @queue_copy){
+      if (@queue ~~ @queue_copy){
+        say "New Queue", " ",@queue, "\n", "Queue Copy", " ",@queue_copy,"\n";
+        $count++;
+        say "They Match!!!";
+        $match = 1; 
+      } else {
+        # say "NO MATCH";
+        $count++;
+      }
+    }
+    
   
-}while(@queue_copy != @new_queue)
+}while($match != 1);
+
+say "It took", " ", $count, " ", "days to return to initial order.";
 
 }
 
