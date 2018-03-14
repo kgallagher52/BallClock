@@ -31,8 +31,6 @@ sub begin {
 
 }
 
-
-
 sub create_queue {
     say "How many balls would you like in the queue between 27-127?";
     my $answer = <STDIN>;
@@ -63,8 +61,6 @@ sub queue {
     my $count = 0;
     my $match = 0;
     
-   
-  
   do {
 
     push @minute_track, shift @queue;
@@ -94,8 +90,9 @@ sub queue {
 
     qw[@queue_copy];
     if (@queue == @queue_copy){
+          # say "New Queue", " ",@queue, "\n", "Queue Copy", " ",@queue_copy,"\n";
       if (@queue ~~ @queue_copy){
-        say "New Queue", " ",@queue, "\n", "Queue Copy", " ",@queue_copy,"\n";
+        # say "New Queue", " ",@queue, "\n", "Queue Copy", " ",@queue_copy,"\n";
         $count++;
         say "They Match!!!";
         $match = 1; 
@@ -109,6 +106,14 @@ sub queue {
 }while($match != 1);
 
 say "It took", " ", $count, " ", "days to return to initial order.";
+say "Would you like to play again?";
+my $play = <STDIN>;
+  chop $play;
+  if ($play eq 'yes') {
+      create_queue();
+  } else {
+    say "Thanks for using ballclock. \n";
+  }
 
 }
 
